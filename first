@@ -1,0 +1,86 @@
+//迪杰斯特拉算法
+#include<iostream>
+using namespace std;
+
+void swap(int &a, int &b)
+{
+	int temp = a;
+	a = b;
+	b = temp;
+}
+//右小等，左大，交换
+void print(int a[],int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+}
+void quickSort1(int a[], int low, int high)
+{
+	if (low >= high)
+		return;
+	int i = low, j = high;
+	int temp = a[low];
+	while (i < j)
+	{
+		for (; a[j] > temp; j--);//找一个大或等于的
+		for (; i < j&&a[i] <= temp; i++);//找一个小于的，注由于是从low开始
+		if (i < j) {
+			swap(a[i], a[j--]);//大小交换
+		}
+	}
+	swap(a[low], a[i]);
+	quickSort1(a, low, i - 1);
+	quickSort1(a, i + 1, high);
+}
+//书普遍
+void quickSort2(int a[], int low, int high)
+{
+	if (low >= high)
+		return;
+	int i = low, j = high;
+	int temp = a[low];
+	while (i < j)
+	{
+		for (; a[j] > temp; j--);
+		if (i < j) {
+			a[i] = a[j];//起始的i是头，已经保存在temp中
+		}
+		for (; i<j&&a[i] <= temp; i++);
+		if (i < j)
+		{
+			a[j] = a[i];//j已经赋值
+		}
+	}
+	a[i] = temp;
+	quickSort2(a, low, i - 1);
+	quickSort2(a, i + 1, high);
+}
+//两标志划分小区间
+void quickSort3(int a[], int low, int high)
+{
+	if (low >= high)
+		return;
+	int i = low, j = i + 1;
+	int temp = a[low];
+	for (; j <= high; j++)//j遍历一遍，找小于的
+	{
+		if (a[j] < temp) {
+			swap(a[++i], a[j]);//i指向小于区间的最后一位，i++就是指向的就是大于的，j指向小于，交换
+		}
+	}
+	swap(a[low], a[i]);//i指小于的，交换，此时刚好后面的都大于，前面的都小于
+	quickSort3(a, low, i - 1);
+	quickSort3(a, i + 1, high);
+
+}
+int main()
+{
+	int a[10] = {64,158,79,79,129,12,6,6,6,999};
+	print(a,10);
+	quickSort1(a, 0, 9);
+	print(a,10);
+    return 0;
+}
